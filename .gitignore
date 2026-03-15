@@ -1,41 +1,28 @@
-# Compiled Lua sources
-luac.out
+-- 1. This loads the "Skin" (The link you found)
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/76c/BoringHub/main/Source.lua"))()
 
-# luarocks build files
-*.src.rock
-*.zip
-*.tar.gz
+-- 2. This creates the Menu Window
+local Window = Library:CreateWindow("Catch and Tame | Mobile")
+local Main = Window:CreateFolder("Auto Farm")
 
-# Object files
-*.o
-*.os
-*.ko
-*.obj
-*.elf
+-- 3. The "Auto Collect" Button
+Main:CreateToggle("Auto Collect", function(state)
+    _G.Collect = state
+    while _G.Collect do
+        task.wait(0.1)
+        for _, v in pairs(workspace:GetChildren()) do
+            if v:IsA("Part") and v.Name == "Drop" then 
+                v.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+            end
+        end
+    end
+end)
 
-# Precompiled Headers
-*.gch
-*.pch
-
-# Libraries
-*.lib
-*.a
-*.la
-*.lo
-*.def
-*.exp
-
-# Shared objects (inc. Windows DLLs)
-*.dll
-*.so
-*.so.*
-*.dylib
-
-# Executables
-*.exe
-*.out
-*.app
-*.i*86
-*.x86_64
-*.hex
-
+-- 4. The "Auto Cash" Button
+Main:CreateToggle("Auto Cash", function(state)
+    _G.Cash = state
+    while _G.Cash do
+        task.wait(1)
+        game:GetService("ReplicatedStorage").Events.Sell:FireServer()
+    end
+end)
